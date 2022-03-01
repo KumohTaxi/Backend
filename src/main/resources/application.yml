@@ -1,0 +1,11 @@
+server:
+  port: 8081
+  host: localhost
+
+spring:
+  profiles:
+    active: dev
+
+logging:
+  level:
+    root: INFO
