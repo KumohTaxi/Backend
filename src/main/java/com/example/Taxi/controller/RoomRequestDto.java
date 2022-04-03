@@ -1,6 +1,7 @@
-package com.example.Taxi.controller.room;
+package com.example.Taxi.controller;
 
 
+import com.example.Taxi.domain.Room;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,14 @@ public class RoomRequestDto {
         this.dateTime = dateTime;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Room toEntity() {
+        return Room.builder()
+                .destination(destination)
+                .dateTime(dateTime)
+                .latitude(latitude)
+                .longitude(longitude)
+                .build();
     }
 }
