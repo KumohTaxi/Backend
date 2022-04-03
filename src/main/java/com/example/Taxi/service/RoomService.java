@@ -15,6 +15,7 @@ import java.util.List;
 public class RoomService {
     private final RoomRepo roomRepo;
 
+    @Transactional
     public void saveRoom(Room room) {
         roomRepo.save(room);
     }

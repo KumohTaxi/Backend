@@ -15,11 +15,11 @@ public class RoomRequestDto {
 
     private String destination;
     private LocalDateTime dateTime;
-    private BigDecimal latitude; //위도
-    private BigDecimal longitude; //경도
+    private Double latitude; //위도
+    private Double longitude; //경도
 
     @Builder
-    public RoomRequestDto(String destination, LocalDateTime dateTime, BigDecimal latitude, BigDecimal longitude) {
+    public RoomRequestDto(String destination, LocalDateTime dateTime, Double latitude, Double longitude) {
         this.destination = destination;
         this.dateTime = dateTime;
         this.latitude = latitude;
