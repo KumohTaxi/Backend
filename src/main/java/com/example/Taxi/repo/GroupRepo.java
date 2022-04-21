@@ -19,7 +19,8 @@ public class GroupRepo {
     }
 
     public List<Group> findAll(){
-        return em.createQuery("select r from Room r", Group.class)
+        return em.createQuery("select g from Group g", Group.class)
                 .getResultList();
     }
+
 }

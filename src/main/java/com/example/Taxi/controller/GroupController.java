@@ -1,11 +1,14 @@
 package com.example.Taxi.controller;
 
 import com.example.Taxi.domain.Group;
+import com.example.Taxi.domain.Member;
 import com.example.Taxi.service.GroupService;
+import com.example.Taxi.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,18 +18,22 @@ import java.util.List;
 public class GroupController {
     
     private final GroupService groupService;
+    private final MemberService memberService;
 
-    @PostMapping("/room/new")
-    public void createRoom(@RequestBody GroupRequestDto groupRequestDto) {
-        groupService.saveRoom(groupRequestDto.toEntity());
+    private int cnt = 0;
+
+    @PostMapping("/group/new")
+    public void createGroup( @RequestBody @Valid GroupRequestDto groupRequestDto) {
+        Member member = memberService.findMember(groupRequestDto.getAccessToken());
+        groupService.saveGroup(groupRequestDto.toEntity(member));
     }
 
-    @GetMapping("/room")
-    public List<GroupResponseDto> findRoom() {
-        List<Group> groups = groupService.findRooms();
+    @GetMapping("/group")
+    public List<GroupResponseDto> findGroup() {
+        List<Group> groups = groupService.findGroups();
         List<GroupResponseDto> groupResponseDtos = new ArrayList<>();
         for (Group group : groups) {
-            groupResponseDtos.add(new GroupResponseDto(group));
+            groupResponseDtos.add(new GroupResponseDto(group,cnt));
         }
         return groupResponseDtos;
     }

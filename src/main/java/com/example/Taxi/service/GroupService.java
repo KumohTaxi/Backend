@@ -16,11 +16,11 @@ public class GroupService {
     private final GroupRepo groupRepo;
 
     @Transactional
-    public void saveRoom(Group group) {
+    public void saveGroup(Group group) {
         groupRepo.save(group);
     }
 
-    public List<Group> findRooms() {
+    public List<Group> findGroups() {
         return groupRepo.findAll();
     }
 }
