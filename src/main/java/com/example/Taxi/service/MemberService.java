@@ -21,14 +21,16 @@ public class MemberService {
     private final KaKaoApI kaKaoApI;
     private final MemberRepo memberRepo;
 
-    public TokenDto getToken(String authCode) {
+    public TokenDto requestTokenToKakao(String authCode) {
         TokenDto token = kaKaoApI.getToken(authCode);
         return token;
     }
 
     @Transactional
-    public void join(String accessToken) {
-        memberRepo.save(kaKaoApI.getUserInfo(accessToken));
+    public int login(String accessTokenByKakao) {
+        Member member = kaKaoApI.getUserInfo(accessTokenByKakao);
+        memberRepo.save(member);
+        return member.getIdentityNum();
     }
 
     public Member findMember(String accessToken) {

@@ -1,22 +1,42 @@
 package com.example.Taxi.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Getter
+@Entity
+@NoArgsConstructor
 public class Member {
-    private String id;
-    private String password;
+    @Id @GeneratedValue
+    private Long id;
+    private int identityNum;
+    private String nickname;
+    private String accessTokenKaKao;
+    private String refreshTokenKaKao;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JoinColumn(name = "groups_id")
+    private Group groups;
 
-    public String getId() {
-        return id;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Builder
+    public Member(int identityNum, String nickname, String accessTokenKaKao, String refreshTokenKaKao, Gender gender) {
+        this.identityNum = identityNum;
+        this.nickname = nickname;
+        this.accessTokenKaKao = accessTokenKaKao;
+        this.refreshTokenKaKao = refreshTokenKaKao;
+        this.gender = gender;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void updateTokens(String accessTokenKaKao, String refreshTokenkaKao) {
+        this.accessTokenKaKao = accessTokenKaKao;
+        this.refreshTokenKaKao = refreshTokenkaKao;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void updateGroup(Group group) {
+        this.groups = group;
     }
 }
