@@ -20,8 +20,7 @@ public class MemberController {
         log.info("authCode: " + authCode);
 
         TokenDto tokenByKaKaoDto = memberService.requestTokenToKakao(authCode);
-        int identityNumForMember = memberService.login(tokenByKaKaoDto.getAccessToken());
-        return jwtTokenProvider.createToken(identityNumForMember);
+        return memberService.login(tokenByKaKaoDto.getAccessToken());
     }
 
     @PostMapping("/member/token")
@@ -30,7 +29,9 @@ public class MemberController {
             throw new Exception("유효하지 않은 토큰입니다.");
         }
         else{
-            return jwtTokenProvider.createToken(jwtTokenProvider.getIdentityNum(refreshToken));
+            TokenDto token = jwtTokenProvider.createToken(jwtTokenProvider.getIdentityNumByRefreshToken(refreshToken));
+            jwtTokenProvider.update(jwtTokenProvider.getIdentityNumByRefreshToken(refreshToken),token.getAccessToken());
+            return token;
         }
     }
 

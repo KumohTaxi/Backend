@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Member {
     @Id @GeneratedValue
     private Long id;
-    private int identityNum;
+    private Long identityNum;
     private String nickname;
     private String accessTokenKaKao;
     private String refreshTokenKaKao;
@@ -23,7 +23,7 @@ public class Member {
     private Gender gender;
 
     @Builder
-    public Member(int identityNum, String nickname, String accessTokenKaKao, String refreshTokenKaKao, Gender gender) {
+    public Member(Long identityNum, String nickname, String accessTokenKaKao, String refreshTokenKaKao, Gender gender) {
         this.identityNum = identityNum;
         this.nickname = nickname;
         this.accessTokenKaKao = accessTokenKaKao;

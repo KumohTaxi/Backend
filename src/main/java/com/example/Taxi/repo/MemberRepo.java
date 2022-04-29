@@ -35,5 +35,12 @@ public class MemberRepo {
                 .getResultList();
         return members;
     }
+
+    public List<Member> findMemberByIdentityNum(Long identityNum) {
+        List<Member> members = em.createQuery("select m from Member m where m.identityNum = :identityNum", Member.class)
+                .setParameter("identityNum", identityNum)
+                .getResultList();
+        return members;
+    }
 }
 
