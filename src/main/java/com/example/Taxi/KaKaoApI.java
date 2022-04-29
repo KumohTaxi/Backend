@@ -30,7 +30,7 @@ public class KaKaoApI {
     private String refreshToken;
     private Gender gender;
     private String nickname;
-    private int identityNum;
+    private Long identityNum;
 
     public TokenDto getToken(String authCode) {
         try {
@@ -106,15 +106,17 @@ public class KaKaoApI {
             }
             log.info("response body : " + result);
 
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(result);
+//            JsonParser parser = new JsonParser();
+//            JsonElement element = parser.parse(result);
+            JsonElement element = JsonParser.parseString(result);
 
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
             JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
-            identityNum = element.getAsJsonObject().get("id").getAsInt();
+            identityNum = element.getAsJsonObject().get("id").getAsLong();
             nickname = properties.getAsJsonObject().get("nickname").getAsString();
             gender = Gender.valueOf(kakao_account.getAsJsonObject().get("gender").getAsString().toUpperCase());
+            log.info("userInfo: "+ identityNum + " " + nickname + " " + gender);
 
 
 
