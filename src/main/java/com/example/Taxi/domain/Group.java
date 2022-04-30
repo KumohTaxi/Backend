@@ -24,9 +24,6 @@ public class Group {
     @OneToMany(mappedBy = "groups")
     private List<Member> members = new ArrayList<>();
 
-    @OneToMany @JoinColumn(name = "post_id")
-    private List<Post> posts = new ArrayList<>();
-
     @Builder
     public Group(String destination, LocalDateTime dateTime, Double latitude, Double longitude, Member member) {
         this.destination = destination;
@@ -34,18 +31,14 @@ public class Group {
         this.latitude = latitude;
         this.longitude = longitude;
         this.members.add(member);
-        member.updateGroup(this);
+        member.joinGroup(this);
     }
-
-    public void addPostToGroup(Post post){
-        posts.add(post);
-    }
-
-    public void removeMemberFromGroup(Member member) {
+    
+    public void removeMember(Member member) {
         members.remove(member);
     }
 
-    public void addMemberToGroup(Member member) {
+    public void involveMember(Member member) {
         members.add(member);
     }
 }

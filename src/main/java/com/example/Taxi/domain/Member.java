@@ -36,7 +36,7 @@ public class Member {
         this.refreshTokenKaKao = refreshTokenkaKao;
     }
 
-    public void updateGroup(Group group) {
+    public void joinGroup(Group group) {
         this.groups = group;
     }
 }
