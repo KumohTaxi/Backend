@@ -20,6 +20,7 @@ public class GroupRequestDto {
     private LocalDateTime dateTime;
     private Double latitude; //위도
     private Double longitude; //경도
+    private Member member;
 
     @Builder
     public GroupRequestDto(String accessToken, String destination, LocalDateTime dateTime, Double latitude, Double longitude) {

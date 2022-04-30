@@ -1,7 +1,6 @@
 package com.example.Taxi.controller;
 
 import com.example.Taxi.JwtTokenProvider;
-import com.example.Taxi.domain.Group;
 import com.example.Taxi.domain.Member;
 import com.example.Taxi.service.GroupService;
 import com.example.Taxi.service.MemberService;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,12 +23,12 @@ public class GroupController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/group/new")
-    public ResponseEntity<Object> createGroup(@RequestBody @Valid GroupRequestDto groupRequestDto) throws Exception {
-        if(jwtTokenProvider.validateToken(groupRequestDto.getAccessToken())){
-            Long identityNumForMember = jwtTokenProvider.getIdentityNumByAccessToken(groupRequestDto.getAccessToken());
+    public ResponseEntity<Object> createGroup(@RequestBody @Valid GroupRequestDto groupReqDto) throws Exception {
+        if(jwtTokenProvider.validateToken(groupReqDto.getAccessToken())){
+            Long identityNumForMember = jwtTokenProvider.getIdentityNumByAccessToken(groupReqDto.getAccessToken());
             Member member = memberService.findMemberByIdentityNum(identityNumForMember);
             if (member.getGroups() == null){
-                groupService.createGroup(groupRequestDto.toEntity(member));
+                groupService.createGroup(groupReqDto, member);
                 log.info("방 정보" + member.getGroups().getDestination());
                 return new ResponseEntity("방 생성 성공!!", HttpStatus.OK);
             } else{
@@ -49,11 +47,6 @@ public class GroupController {
     // /all 또 /{id}를 추가하여 특정
     @GetMapping("/group")
     public List<GroupResponseDto> findGroup() {
-        List<Group> groups = groupService.findGroups();
-        List<GroupResponseDto> groupResponseDtos = new ArrayList<>();
-        for (Group group : groups) {
-            groupResponseDtos.add(new GroupResponseDto(group));
-        }
-        return groupResponseDtos;
+        return groupService.findGroups();
     }
 }
