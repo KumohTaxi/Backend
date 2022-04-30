@@ -16,7 +16,7 @@ public class GroupService {
     private final GroupRepo groupRepo;
 
     @Transactional
-    public void saveGroup(Group group) {
+    public void createGroup(Group group) {
         groupRepo.save(group);
     }
 
