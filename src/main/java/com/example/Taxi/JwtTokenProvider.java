@@ -1,29 +1,36 @@
 package com.example.Taxi;
 
 import com.example.Taxi.controller.TokenDto;
+import com.example.Taxi.domain.Token;
+import com.example.Taxi.repo.TokenRepo;
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 @Slf4j
+@Transactional
 @Component
+@RequiredArgsConstructor
 public class JwtTokenProvider {
     @Value("${key.token}")
     private String key;
 
-    public TokenDto createToken(int identityNum) {
-        String accessToken = makeJwt(-1);
+    private final TokenRepo tokenRepo;
+
+    public TokenDto createToken(Long identityNum) {
+        String accessToken = makeJwt(0L);
         String refreshToken = makeJwt(identityNum);
         return new TokenDto(accessToken, refreshToken);
     }
 
-    public String makeJwt(int identityNum){
+    public String makeJwt(Long identityNum){
         Date now = new Date();
         if(identityNum > -1){
             //refreshToken 생성 및 반환
@@ -46,18 +53,32 @@ public class JwtTokenProvider {
         }
     }
 
-    public boolean validateToken(String jwtToken) {
+    public boolean validateToken(String jwtToken) throws Exception {
         try{
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken);
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException e){
             log.info(e.toString());
-            return false;
+            throw new Exception("유효하지 않은 토큰입니다.");
         }
     }
 
-    public int getIdentityNum(String refreshToken) {
+    public Long getIdentityNumByRefreshToken(String refreshToken) {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(refreshToken).getBody()
-                .get("identityNum", Integer.class);
+                .get("identityNum", Long.class);
+    }
+
+    public Long getIdentityNumByAccessToken(String accessToken) {
+        List<Token> token = tokenRepo.findTokenByAccessToken(accessToken);
+        return token.get(0).getIdentityNum();
+    }
+
+    public void update(Long identityNum, String AccessToken) {
+        List<Token> token = tokenRepo.findTokenByIdentityNum(identityNum);
+        token.get(0).updateAccessToken(AccessToken);
+    }
+
+    public void save(Token token){
+        tokenRepo.save(token);
     }
 }
