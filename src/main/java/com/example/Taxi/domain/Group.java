@@ -21,8 +21,11 @@ public class Group {
     private Double latitude; //위도
     private Double longitude; //경도
 
-    @OneToMany(mappedBy = "groups")
+    @OneToMany(mappedBy = "group")
     private List<Member> members = new ArrayList<>();
+
+    @OneToMany @JoinColumn(name = "post_id")
+    private List<Post> posts = new ArrayList<>();
 
     @Builder
     public Group(String destination, LocalDateTime dateTime, Double latitude, Double longitude, Member member) {
@@ -36,9 +39,15 @@ public class Group {
     
     public void removeMember(Member member) {
         members.remove(member);
+        member.exitGroup();
     }
 
     public void involveMember(Member member) {
         members.add(member);
+        member.joinGroup(this);
+    }
+
+    public void post(Post post) {
+        posts.add(post);
     }
 }
