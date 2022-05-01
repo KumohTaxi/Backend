@@ -1,5 +1,6 @@
 package com.example.Taxi.repo;
 
+import com.example.Taxi.controller.GroupResponseDto;
 import com.example.Taxi.domain.Group;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,4 +24,7 @@ public class GroupRepo {
                 .getResultList();
     }
 
+    public Group findById(Long id) {
+        return em.find(Group.class, id);
+    }
 }
