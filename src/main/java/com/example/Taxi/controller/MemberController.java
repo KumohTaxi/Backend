@@ -16,24 +16,24 @@ public class MemberController {
 
 
     @PostMapping("/auth/kakao")
-    public TokenDto login(@RequestBody String authCode){
-        log.info("authCode: " + authCode);
+    public TokenDto login(@RequestBody LoginReqDto loginReqDto) {
+        log.info("authCode: " + loginReqDto.getAuthCode());
 
-        TokenDto tokenByKaKaoDto = memberService.requestTokenToKakao(authCode);
+        TokenDto tokenByKaKaoDto = memberService.requestTokenToKakao(loginReqDto.getAuthCode());
         return memberService.login(tokenByKaKaoDto.getAccessToken());
     }
 
     @PostMapping("/member/token")
-    public TokenDto reissue(@RequestBody String refreshToken) throws Exception {
-        if(!jwtTokenProvider.validateToken(refreshToken)){
+    public TokenDto reissue(@RequestBody TokenDto tokenDto) throws Exception {
+        if (!jwtTokenProvider.validateToken(tokenDto.getRefreshToken())) {
             throw new Exception("유효하지 않은 토큰입니다.");
-        }
-        else{
-            TokenDto token = jwtTokenProvider.createToken(jwtTokenProvider.getIdentityNumByRefreshToken(refreshToken));
-            jwtTokenProvider.update(jwtTokenProvider.getIdentityNumByRefreshToken(refreshToken),token.getAccessToken());
+        } else {
+            TokenDto token = jwtTokenProvider.createToken(jwtTokenProvider.getIdentityNumByRefreshToken(tokenDto.getRefreshToken()));
+            jwtTokenProvider.update(jwtTokenProvider.getIdentityNumByRefreshToken(tokenDto.getRefreshToken()), token.getAccessToken());
             return token;
         }
     }
 
+    //추가정보(gender 요청) 요청 메서드 생성
 
 }
