@@ -17,7 +17,7 @@ public class Member {
     private String accessTokenKaKao;
     private String refreshTokenKaKao;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY) @JoinColumn(name = "groups_id")
-    private Group groups;
+    private Group group;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -37,6 +37,15 @@ public class Member {
     }
 
     public void joinGroup(Group group) {
-        this.groups = group;
+        this.group = group;
+    }
+
+    public void exitGroup() {
+        this.group = null;
+    }
+
+    public void updateUserInfo(Long identityNum, Gender gender) {
+        this.identityNum = identityNum;
+        this.gender = gender;
     }
 }
