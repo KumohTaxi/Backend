@@ -13,14 +13,8 @@ public class MemberRepo {
 
     private final EntityManager em;
 
-    public List<Member> findByAccessToken(String accessToken) {
-        return em.createQuery("select m from Member m where m.accessTokenKaKao = :accessToken")
-                .setParameter("accessToken", accessToken)
-                .getResultList();
-    }
-
     public void save(Member member) {
-        List<Member> findMembers = findByNickname(member.getNickname());
+        List<Member> findMembers = findMemberByIdentityNum(member.getIdentityNum());
         if (findMembers.isEmpty()) {
             em.persist(member);
         } else {
