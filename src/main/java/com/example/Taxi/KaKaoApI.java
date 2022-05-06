@@ -27,7 +27,7 @@ public class KaKaoApI {
     private String client_id;
     private String accessToken;
     private String refreshToken;
-    private Gender gender;
+    private Gender gender = Gender.MALE;
     private String nickname;
     private Long identityNum;
 
@@ -96,7 +96,7 @@ public class KaKaoApI {
 
             identityNum = element.getAsJsonObject().get("id").getAsLong();
             nickname = properties.getAsJsonObject().get("nickname").getAsString();
-            gender = Gender.valueOf(kakao_account.getAsJsonObject().get("gender").getAsString().toUpperCase());
+            //gender = Gender.valueOf(kakao_account.getAsJsonObject().get("gender").getAsString().toUpperCase());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -130,36 +130,5 @@ public class KaKaoApI {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    //https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#additional-consent
-    public AdditionInfoDto getUserGender(String accessToken){
-
-        try {
-            URL url = new URL("https://kauth.kakao.com/oauth/token");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-            log.info("responseCode : " + conn.getResponseCode());
-
-            BufferedReader br = new BufferedReader(new InputStreamReader((InputStream) conn.getContent(), "UTF-8"));
-            String line = ""; String result = "";
-            while ((line = br.readLine()) != null) {
-                result += line;
-            }
-            log.info("response body : " + result);
-
-            JsonElement element = JsonParser.parseString(result);
-            JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
-
-            identityNum = element.getAsJsonObject().get("id").getAsLong();
-            gender = Gender.valueOf(kakao_account.getAsJsonObject().get("gender").getAsString().toUpperCase());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return new AdditionInfoDto(identityNum, gender);
-
     }
 }
