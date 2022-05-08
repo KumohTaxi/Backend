@@ -35,6 +35,9 @@ public class MemberService {
     @Transactional
     public TokenDto login(String accessTokenByKakao) {
         Member member = kaKaoApI.getUserInfo(accessTokenByKakao);
+        if(member.getGender() == null){
+            return new TokenDto("genderless", "genderless");
+        }
         memberRepo.save(member);
         log.info("로그인 완료!!" + member.getId() +" "+ member.getNickname());
         TokenDto tokenByService = jwtTokenProvider.createToken(member.getIdentityNum());
@@ -53,15 +56,4 @@ public class MemberService {
                 jwtTokenProvider.getIdentityNumByAccessToken(accessToken)).get(0);
     }
 
-    @Transactional
-    public void getAdditionInfo(String accessToken) {
-        Member member = memberRepo.findMemberByIdentityNum(
-                jwtTokenProvider.getIdentityNumByAccessToken(accessToken)).get(0);
-        AdditionInfoDto userInfo = kaKaoApI.getUserGender(member.getAccessTokenKaKao());
-
-        log.info("Before: " + member.getIdentityNum() + "After: " + userInfo.getIdentityNum());
-        log.info("Before: " + member.getGender() + "After: " + userInfo.getGender());
-
-        member.updateUserInfo(userInfo.getIdentityNum(),userInfo.getGender());
-    }
 }
