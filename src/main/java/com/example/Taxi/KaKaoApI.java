@@ -27,7 +27,7 @@ public class KaKaoApI {
     private String client_id;
     private String accessToken;
     private String refreshToken;
-    private Gender gender = Gender.MALE;
+    private Gender gender;
     private String nickname;
     private Long identityNum;
 
@@ -96,7 +96,9 @@ public class KaKaoApI {
 
             identityNum = element.getAsJsonObject().get("id").getAsLong();
             nickname = properties.getAsJsonObject().get("nickname").getAsString();
-            //gender = Gender.valueOf(kakao_account.getAsJsonObject().get("gender").getAsString().toUpperCase());
+            if(kakao_account.has("gender")){
+                gender = Gender.valueOf(kakao_account.get("gender").getAsString().toUpperCase());
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
