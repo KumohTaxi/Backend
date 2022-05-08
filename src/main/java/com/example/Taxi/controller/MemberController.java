@@ -35,13 +35,7 @@ public class MemberController {
         }
     }
 
-    //추가정보(gender 요청) 요청 메서드 생성
-    @PostMapping("/member/gender")
-    public void getGender(@RequestBody TokenDto tokenDto) {
-        memberService.getAdditionInfo(tokenDto.getAccessToken());
-    }
-
-    @GetMapping("/member/id")
+    @PostMapping("/member/id")
     public Long getId(@RequestBody TokenDto tokenDto) {
         return memberService.findMemberByIdentityNum(
                 jwtTokenProvider.getIdentityNumByAccessToken(tokenDto.getAccessToken())).getIdentityNum();
