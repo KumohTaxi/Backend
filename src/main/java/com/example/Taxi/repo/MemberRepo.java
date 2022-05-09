@@ -23,13 +23,6 @@ public class MemberRepo {
 
     }
 
-    public List<Member> findByNickname(String nickname) {
-        List<Member> members = em.createQuery("select m from Member m where m.nickname = :nickname", Member.class)
-                .setParameter("nickname", nickname)
-                .getResultList();
-        return members;
-    }
-
     public List<Member> findMemberByIdentityNum(Long identityNum) {
         List<Member> members = em.createQuery("select m from Member m where m.identityNum = :identityNum", Member.class)
                 .setParameter("identityNum", identityNum)
