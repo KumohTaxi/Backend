@@ -79,6 +79,12 @@ public class JwtTokenProvider {
     }
 
     public void save(Token token){
-        tokenRepo.save(token);
+        List<Token> tokens = tokenRepo.findTokenByIdentityNum(token.getIdentityNum());
+        if(tokens.isEmpty()){
+            tokenRepo.save(token);
+        }else{
+            tokens.get(0).updateAccessToken(token.getAccessToken());
+        }
+
     }
 }
