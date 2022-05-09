@@ -133,4 +133,25 @@ public class KaKaoApI {
             e.printStackTrace();
         }
     }
+
+    public void unlink(String accessToken){
+
+        try {
+            URL url = new URL("https://kapi.kakao.com/v1/user/unlink");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            log.info("연결 끊기 responseCode : " + conn.getResponseCode());
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String result = ""; String line = "";
+            while ((line = br.readLine()) != null) {
+                result += line;
+            }
+            log.info(result);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -40,4 +40,9 @@ public class MemberController {
         return memberService.findMemberByIdentityNum(
                 jwtTokenProvider.getIdentityNumByAccessToken(tokenDto.getAccessToken())).getIdentityNum();
     }
+
+    @PostMapping("/member/unlink")
+    public void removeMember(@RequestBody TokenDto tokenDto) {
+        memberService.remove(tokenDto);
+    }
 }

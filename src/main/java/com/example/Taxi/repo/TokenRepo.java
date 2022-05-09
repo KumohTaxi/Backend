@@ -27,4 +27,8 @@ public class TokenRepo {
                 .setParameter("identityNum",identityNum)
                 .getResultList();
     }
+
+    public void remove(Token token) {
+        em.remove(token);
+    }
 }

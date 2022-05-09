@@ -36,5 +36,9 @@ public class MemberRepo {
                 .getResultList();
         return members;
     }
+
+    public void remove(Member member){
+        em.remove(member);
+    }
 }
 
