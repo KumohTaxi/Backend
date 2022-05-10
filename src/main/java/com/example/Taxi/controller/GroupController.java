@@ -41,9 +41,9 @@ public class GroupController {
     }
 
     // /all 또 /{id}를 추가하여 특정
-    @GetMapping("/group")
-    public List<GroupResponseDto> findGroup() {
-        return groupService.findGroups();
+    @PostMapping("/group")
+    public List<GroupResponseDto> findGroup(@RequestBody TokenDto tokenDto) {
+        return groupService.findGroups(tokenDto);
     }
 
     @GetMapping("/group/{accessToken}")

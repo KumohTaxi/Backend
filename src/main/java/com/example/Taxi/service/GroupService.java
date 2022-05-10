@@ -2,6 +2,7 @@ package com.example.Taxi.service;
 
 import com.example.Taxi.controller.GroupRequestDto;
 import com.example.Taxi.controller.GroupResponseDto;
+import com.example.Taxi.controller.TokenDto;
 import com.example.Taxi.domain.Group;
 import com.example.Taxi.domain.Member;
 import com.example.Taxi.domain.Token;
@@ -30,10 +31,14 @@ public class GroupService {
         groupRepo.save(groupReqDto.toEntity(member));
     }
 
-    public List<GroupResponseDto> findGroups() {
+    public List<GroupResponseDto> findGroups(TokenDto tokenDto) {
         List<GroupResponseDto> groupResDtos =new ArrayList<>();
+        Member member = memberRepo.findMemberByIdentityNum(
+                tokenRepo.findTokenByAccessToken(tokenDto.getAccessToken()).get(0).getIdentityNum()).get(0);
+
         for (Group group : groupRepo.findAll()) {
-            if(group.getDateTime().isBefore(LocalDateTime.now()) || group.getMembers().size() == 0){
+            if(group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))
+                    || group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender()){
                 continue;
             }
             groupResDtos.add(new GroupResponseDto(group));
