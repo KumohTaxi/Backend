@@ -98,6 +98,8 @@ public class KaKaoApI {
             nickname = properties.getAsJsonObject().get("nickname").getAsString();
             if(kakao_account.has("gender")){
                 gender = Gender.valueOf(kakao_account.get("gender").getAsString().toUpperCase());
+            } else{
+                gender = Gender.NONE;
             }
 
         } catch (IOException e) {

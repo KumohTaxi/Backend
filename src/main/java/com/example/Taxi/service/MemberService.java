@@ -4,6 +4,7 @@ package com.example.Taxi.service;
 import com.example.Taxi.JwtTokenProvider;
 import com.example.Taxi.KaKaoApI;
 import com.example.Taxi.controller.TokenDto;
+import com.example.Taxi.domain.Gender;
 import com.example.Taxi.domain.Member;
 import com.example.Taxi.domain.Token;
 import com.example.Taxi.repo.MemberRepo;
@@ -37,7 +38,7 @@ public class MemberService {
     @Transactional
     public TokenDto login(String accessTokenByKakao) {
         Member member = kaKaoApI.getUserInfo(accessTokenByKakao);
-        if(member.getGender() == null){
+        if(member.getGender() == Gender.NONE){
             return new TokenDto("genderless", "genderless");
         }
         memberRepo.save(member);
