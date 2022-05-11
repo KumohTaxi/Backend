@@ -34,12 +34,15 @@ public class Group {
         this.latitude = latitude;
         this.longitude = longitude;
         this.members.add(member);
-        member.joinGroup(this);
+        member.makeGroup(this);
     }
     
     public void removeMember(Member member) {
         members.remove(member);
         member.exitGroup();
+        if(member.getStatus() == Status.CAPTAIN && members.size() > 0){
+            members.get(0).promoteStatus();
+        }
     }
 
     public void involveMember(Member member) {

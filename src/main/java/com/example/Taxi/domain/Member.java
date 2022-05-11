@@ -21,14 +21,17 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Builder
-    public Member(Long identityNum, String nickname, String accessTokenKaKao, String refreshTokenKaKao, Gender gender) {
+    public Member(Long identityNum, String nickname, String accessTokenKaKao, String refreshTokenKaKao, Gender gender, Status status) {
         this.identityNum = identityNum;
         this.nickname = nickname;
         this.accessTokenKaKao = accessTokenKaKao;
         this.refreshTokenKaKao = refreshTokenKaKao;
         this.gender = gender;
+        this.status = status;
     }
 
     public void updateTokens(String accessTokenKaKao, String refreshTokenkaKao) {
@@ -38,10 +41,21 @@ public class Member {
 
     public void joinGroup(Group group) {
         this.group = group;
+        this.status = Status.CREW;
+    }
+
+    public void makeGroup(Group group){
+        this.group = group;
+        this.status = Status.CAPTAIN;
     }
 
     public void exitGroup() {
         this.group = null;
+        this.status = Status.NONE;
+    }
+
+    public void promoteStatus() {
+        this.status = Status.CAPTAIN;
     }
 
     public void updateUserInfo(Long identityNum, Gender gender) {

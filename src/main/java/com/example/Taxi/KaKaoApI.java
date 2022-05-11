@@ -3,6 +3,7 @@ package com.example.Taxi;
 import com.example.Taxi.controller.TokenDto;
 import com.example.Taxi.domain.Gender;
 import com.example.Taxi.domain.Member;
+import com.example.Taxi.domain.Status;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -112,6 +113,7 @@ public class KaKaoApI {
                 .accessTokenKaKao(this.accessToken)
                 .refreshTokenKaKao(refreshToken)
                 .gender(gender)
+                .status(Status.NONE)
                 .build();
     }
 
