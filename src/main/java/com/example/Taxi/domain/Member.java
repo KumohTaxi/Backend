@@ -57,9 +57,4 @@ public class Member {
     public void promoteStatus() {
         this.status = Status.CAPTAIN;
     }
-
-    public void updateUserInfo(Long identityNum, Gender gender) {
-        this.identityNum = identityNum;
-        this.gender = gender;
-    }
 }
