@@ -17,11 +17,14 @@ public class Post {
     private Member member;
     private String msg;
     private LocalDateTime postTime;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "groups_id")
+    private Group group;
 
     @Builder
-    public Post(Member member, String msg, LocalDateTime postTime) {
+    public Post(Member member, String msg, LocalDateTime postTime, Group group) {
         this.member = member;
         this.msg = msg;
         this.postTime = postTime;
+        this.group = group;
     }
 }

@@ -46,7 +46,7 @@ public class GroupController {
         return groupService.findGroups(tokenDto);
     }
 
-    @GetMapping("/group/{accessToken}")
+    @GetMapping("/group/member/{accessToken}")
     public GroupResponseDto findMyGroup(@PathVariable String accessToken) throws Exception {
         return groupService.findMyGroup(accessToken);
     }
@@ -55,6 +55,11 @@ public class GroupController {
     public void enterGroup(@PathVariable Long id, @RequestBody TokenDto tokenDto) throws Exception {
         log.info(tokenDto.getAccessToken());
         groupService.enter(id, tokenDto.getAccessToken());
+    }
+
+    @GetMapping("/group/{id}")
+    public GroupResponseDto findGroupById(@PathVariable Long id) throws Exception {
+        return new GroupResponseDto(groupService.findOne(id));
     }
 
     @PostMapping("/group/{id}/exit")

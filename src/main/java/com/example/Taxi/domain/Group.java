@@ -24,7 +24,7 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private List<Member> members = new ArrayList<>();
 
-    @OneToMany @JoinColumn(name = "post_id")
+    @OneToMany(mappedBy = "group")
     private List<Post> posts = new ArrayList<>();
 
     @Builder

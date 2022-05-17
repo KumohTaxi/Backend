@@ -27,14 +27,15 @@ public class PostService {
     @Transactional
     public void postMsg(PostReqDto postReqDto) {
 
-        Post post = Post.builder()
-                        .msg(postReqDto.getMsg())
-                        .postTime(LocalDateTime.now())
-                        .member(memberRepo.findMemberByIdentityNum(
-                                jwtTokenProvider.getIdentityNumByAccessToken(postReqDto.getAccessToken())).get(0))
-                        .build();
-        postRepo.save(post);
         Group group = groupRepo.findById(postReqDto.getGroupId());
+        Post post = Post.builder()
+                .msg(postReqDto.getMsg())
+                .postTime(LocalDateTime.now())
+                .member(memberRepo.findMemberByIdentityNum(
+                        jwtTokenProvider.getIdentityNumByAccessToken(postReqDto.getAccessToken())).get(0))
+                .group(group)
+                .build();
+        postRepo.save(post);
         group.post(post);
     }
 }
