@@ -65,7 +65,6 @@ public class MemberService {
                 jwtTokenProvider.getIdentityNumByAccessToken(tokenDto.getAccessToken())).get(0);
         kaKaoApI.unlink(member.getAccessTokenKaKao());
         tokenRepo.remove(tokenRepo.findTokenByAccessToken(tokenDto.getAccessToken()).get(0));
-        memberRepo.remove(member);
     }
 
 }
