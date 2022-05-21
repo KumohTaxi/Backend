@@ -1,5 +1,7 @@
 package com.example.Taxi.group;
 
+import com.example.Taxi.config.exception.CustomException;
+import com.example.Taxi.config.exception.CustomExceptionStatus;
 import com.example.Taxi.post.PostResDto;
 import com.example.Taxi.token.TokenDto;
 import com.example.Taxi.member.Member;
@@ -17,7 +19,7 @@ import java.util.List;
 
 
 /**
- * accessToken의 유효성 검증이 필요하다!!
+ * @TODO accessToken의 유효성 검증이 필요하다!!
  */
 
 @Slf4j
@@ -29,15 +31,13 @@ public class GroupController {
     private final MemberService memberService;
 
     @PostMapping("/group/new")
-    public ResponseEntity<Object> createGroup(@RequestBody @Valid GroupRequestDto groupReqDto) throws Exception {
+    public void createGroup(@RequestBody @Valid GroupRequestDto groupReqDto) throws Exception {
         Member member = memberService.findMemberByAccessToken(groupReqDto.getAccessToken());
         if (member.getGroup() == null) {
             groupService.createGroup(groupReqDto, member);
-            log.info("방 정보" + member.getGroup().getDestination());
-            return new ResponseEntity("방 생성 성공!!", HttpStatus.OK);
+            log.info("방 생성 성공!!" + member.getGroup().getDestination());
         } else {
-            //@ExceptionHandler @ControllerAdvice 공부후 예외처리 적용
-            throw new Exception("이미 입장하거나 생성한 그룹이 존재합니다.");
+            throw new CustomException(CustomExceptionStatus.IMPOSSIBLE_ENTER_GROUP);
         }
     }
 

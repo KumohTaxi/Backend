@@ -1,7 +1,7 @@
 package com.example.Taxi.token;
 
-import com.example.Taxi.token.TokenDto;
-import com.example.Taxi.token.Token;
+import com.example.Taxi.config.exception.CustomException;
+import com.example.Taxi.config.exception.CustomExceptionStatus;
 import com.example.Taxi.post.TokenRepo;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ public class JwtTokenProvider {
             return !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException e){
             log.info(e.toString());
-            throw new Exception("유효하지 않은 토큰입니다.");
+            throw new CustomException(CustomExceptionStatus.INVALID_TOKEN);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.example.Taxi.member;
 
+import com.example.Taxi.config.exception.CustomException;
+import com.example.Taxi.config.exception.CustomExceptionStatus;
 import com.example.Taxi.token.JwtTokenProvider;
 import com.example.Taxi.token.TokenDto;
 import lombok.AllArgsConstructor;
@@ -26,7 +28,7 @@ public class MemberController {
     @PostMapping("/member/token")
     public TokenDto reissue(@RequestBody TokenDto tokenDto) throws Exception {
         if (!jwtTokenProvider.validateToken(tokenDto.getRefreshToken())) {
-            throw new Exception("유효하지 않은 토큰입니다.");
+            throw new CustomException(CustomExceptionStatus.INVALID_TOKEN);
         } else {
             TokenDto token = jwtTokenProvider.createToken(jwtTokenProvider.getIdentityNumByRefreshToken(tokenDto.getRefreshToken()));
             jwtTokenProvider.update(jwtTokenProvider.getIdentityNumByRefreshToken(tokenDto.getRefreshToken()), token.getAccessToken());

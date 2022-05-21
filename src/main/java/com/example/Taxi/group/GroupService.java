@@ -1,5 +1,7 @@
 package com.example.Taxi.group;
 
+import com.example.Taxi.config.exception.CustomException;
+import com.example.Taxi.config.exception.CustomExceptionStatus;
 import com.example.Taxi.token.TokenDto;
 import com.example.Taxi.member.Member;
 import com.example.Taxi.token.Token;
@@ -28,13 +30,18 @@ public class GroupService {
     }
 
     public List<GroupResponseDto> findGroups(TokenDto tokenDto) {
+
         List<GroupResponseDto> groupResDtos =new ArrayList<>();
         Member member = memberRepo.findMemberByIdentityNum(
                 tokenRepo.findTokenByAccessToken(tokenDto.getAccessToken()).get(0).getIdentityNum()).get(0);
 
         for (Group group : groupRepo.findAll()) {
-            if(group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))
-                    || group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender()){
+            if (group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender()) {
+                continue;
+            } else if (group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
+                for (Member groupMember : group.getMembers()) {
+                    groupMember.exitGroup();
+                }
                 continue;
             }
             groupResDtos.add(new GroupResponseDto(group));
@@ -45,7 +52,7 @@ public class GroupService {
     public Group findOne(Long id) throws Exception {
         Group group = groupRepo.findById(id);
         if (group == null) {
-            new Exception("존재하지 않습니다");
+            throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
         }
         return group;
     }
@@ -67,12 +74,16 @@ public class GroupService {
     }
 
     public GroupResponseDto findMyGroup(String accessToken) throws Exception {
+
         Member member = memberRepo.findMemberByIdentityNum(
                 tokenRepo.findTokenByAccessToken(accessToken).get(0).getIdentityNum()).get(0);
 
         if (member.getGroup() == null) {
-            throw new Exception("속한 그룹이 존재하지 않습니다.");
+            throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
+        } else if (member.getGroup().getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
+            member.exitGroup();
         }
+
         return new GroupResponseDto(member.getGroup());
     }
 }
