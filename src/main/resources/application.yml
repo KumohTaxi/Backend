@@ -5,9 +5,3 @@ server:
 spring:
   profiles:
     active: dev
-
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
-    root: INFO
