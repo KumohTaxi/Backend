@@ -101,7 +101,7 @@ public class KaKaoApI {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         return Member.builder()
@@ -131,7 +131,7 @@ public class KaKaoApI {
             log.info(result);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -152,7 +152,7 @@ public class KaKaoApI {
             log.info(result);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }
