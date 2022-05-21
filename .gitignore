@@ -35,8 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
-/src/main/resources/application-dev.yml
-/src/main/resources/application-prod.yml
+*application-dev.yml
+*application-prod.yml
 /Jenkinsfile
 /sql
 /src/main/resources/keystore.p12
