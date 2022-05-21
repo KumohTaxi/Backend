@@ -50,7 +50,7 @@ public class KaKaoApI {
             bw.flush();
 
             log.info(sb.toString());
-            log.info("ResponseCode: " + conn.getResponseCode());
+            log.info("getToken ResponseCode: " + conn.getResponseCode());
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = ""; String result = "";
@@ -80,7 +80,7 @@ public class KaKaoApI {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-            log.info("responseCode : " + conn.getResponseCode());
+            log.info("getUserInfo responseCode : " + conn.getResponseCode());
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = ""; String result = "";
@@ -121,7 +121,7 @@ public class KaKaoApI {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-            log.info("responseCode : " + conn.getResponseCode());
+            log.info("logout responseCode : " + conn.getResponseCode());
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String result = ""; String line = "";
@@ -142,7 +142,7 @@ public class KaKaoApI {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-            log.info("연결 끊기 responseCode : " + conn.getResponseCode());
+            log.info("unlink responseCode : " + conn.getResponseCode());
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String result = ""; String line = "";

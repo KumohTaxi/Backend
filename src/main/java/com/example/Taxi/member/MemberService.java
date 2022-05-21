@@ -39,7 +39,7 @@ public class MemberService {
             return new TokenDto("genderless", "genderless");
         }
         memberRepo.save(member);
-        log.info("로그인 완료!!" + member.getId() +" "+ member.getNickname());
+        log.info("로그인 완료!!" + member.getIdentityNum() +" "+ member.getNickname());
         TokenDto tokenByService = jwtTokenProvider.createToken(member.getIdentityNum());
         jwtTokenProvider.save(new Token(member.getIdentityNum(),tokenByService.getAccessToken()));
         return tokenByService;
