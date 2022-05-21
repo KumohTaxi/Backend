@@ -19,7 +19,6 @@ public class MemberController {
 
     @PostMapping("/auth/kakao")
     public TokenDto login(@RequestBody LoginReqDto loginReqDto) {
-        log.info("authCode: " + loginReqDto.getAuthCode());
 
         TokenDto tokenByKaKaoDto = memberService.requestTokenToKakao(loginReqDto.getAuthCode());
         return memberService.login(tokenByKaKaoDto.getAccessToken());
@@ -27,6 +26,7 @@ public class MemberController {
 
     @PostMapping("/member/token")
     public TokenDto reissue(@RequestBody TokenDto tokenDto) throws Exception {
+
         if (!jwtTokenProvider.validateToken(tokenDto.getRefreshToken())) {
             throw new CustomException(CustomExceptionStatus.INVALID_TOKEN);
         } else {

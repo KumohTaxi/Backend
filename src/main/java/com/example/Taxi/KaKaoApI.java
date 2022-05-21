@@ -50,15 +50,13 @@ public class KaKaoApI {
             bw.flush();
 
             log.info(sb.toString());
-            log.info("ResponseStatus: " + conn.getResponseCode());
-            log.info("ResponseBody " + conn.getResponseMessage());
+            log.info("ResponseCode: " + conn.getResponseCode());
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = ""; String result = "";
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            log.info("response body: " + result);
 
             JsonElement element = JsonParser.parseString(result);
 
@@ -89,7 +87,6 @@ public class KaKaoApI {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            log.info("response body : " + result);
 
             JsonElement element = JsonParser.parseString(result);
             JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
