@@ -1,6 +1,5 @@
 package com.example.Taxi.group;
 
-import com.example.Taxi.group.Group;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
