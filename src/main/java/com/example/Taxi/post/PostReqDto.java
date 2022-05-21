@@ -1,4 +1,4 @@
-package com.example.Taxi.controller;
+package com.example.Taxi.post;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

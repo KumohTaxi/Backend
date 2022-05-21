@@ -1,7 +1,6 @@
-package com.example.Taxi.controller;
+package com.example.Taxi.post;
 
-import com.example.Taxi.domain.Post;
-import com.example.Taxi.domain.Status;
+import com.example.Taxi.member.Status;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

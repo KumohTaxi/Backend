@@ -1,8 +1,7 @@
-package com.example.Taxi.controller;
+package com.example.Taxi.member;
 
-import com.example.Taxi.JwtTokenProvider;
-import com.example.Taxi.domain.Token;
-import com.example.Taxi.service.MemberService;
+import com.example.Taxi.token.JwtTokenProvider;
+import com.example.Taxi.token.TokenDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

@@ -1,14 +1,10 @@
-package com.example.Taxi.service;
+package com.example.Taxi.group;
 
-import com.example.Taxi.controller.GroupRequestDto;
-import com.example.Taxi.controller.GroupResponseDto;
-import com.example.Taxi.controller.TokenDto;
-import com.example.Taxi.domain.Group;
-import com.example.Taxi.domain.Member;
-import com.example.Taxi.domain.Token;
-import com.example.Taxi.repo.GroupRepo;
-import com.example.Taxi.repo.MemberRepo;
-import com.example.Taxi.repo.TokenRepo;
+import com.example.Taxi.token.TokenDto;
+import com.example.Taxi.member.Member;
+import com.example.Taxi.token.Token;
+import com.example.Taxi.member.MemberRepo;
+import com.example.Taxi.post.TokenRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,7 +51,7 @@ public class GroupService {
     }
 
     @Transactional
-    public void enter(Long id, String accessToken) {
+    public void enter(Long id, String accessToken) throws Exception{
         Group group = groupRepo.findById(id);
         Token token = tokenRepo.findTokenByAccessToken(accessToken).get(0);
         group.involveMember(memberRepo.findMemberByIdentityNum(token.getIdentityNum()).get(0));

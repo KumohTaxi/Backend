@@ -1,5 +1,8 @@
-package com.example.Taxi.domain;
+package com.example.Taxi.group;
 
+import com.example.Taxi.member.Member;
+import com.example.Taxi.post.Post;
+import com.example.Taxi.member.Status;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,9 +48,13 @@ public class Group {
         }
     }
 
-    public void involveMember(Member member) {
-        members.add(member);
-        member.joinGroup(this);
+    public void involveMember(Member member) throws Exception{
+        if(members.get(0).getGender() != member.getGender()){
+            throw new Exception("방 성별과 입장할 사용자의 성별이 다릅니다.");
+        } else{
+            members.add(member);
+            member.joinGroup(this);
+        }
     }
 
     public void post(Post post) {

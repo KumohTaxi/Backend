@@ -1,9 +1,9 @@
 package com.example.Taxi;
 
-import com.example.Taxi.controller.TokenDto;
-import com.example.Taxi.domain.Gender;
-import com.example.Taxi.domain.Member;
-import com.example.Taxi.domain.Status;
+import com.example.Taxi.token.TokenDto;
+import com.example.Taxi.member.Gender;
+import com.example.Taxi.member.Member;
+import com.example.Taxi.member.Status;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

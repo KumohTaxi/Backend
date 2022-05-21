@@ -1,6 +1,6 @@
-package com.example.Taxi.repo;
+package com.example.Taxi.post;
 
-import com.example.Taxi.domain.Token;
+import com.example.Taxi.token.Token;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

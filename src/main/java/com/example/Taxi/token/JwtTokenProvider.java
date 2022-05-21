@@ -1,8 +1,8 @@
-package com.example.Taxi;
+package com.example.Taxi.token;
 
-import com.example.Taxi.controller.TokenDto;
-import com.example.Taxi.domain.Token;
-import com.example.Taxi.repo.TokenRepo;
+import com.example.Taxi.token.TokenDto;
+import com.example.Taxi.token.Token;
+import com.example.Taxi.post.TokenRepo;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

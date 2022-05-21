@@ -1,6 +1,6 @@
-package com.example.Taxi.controller;
+package com.example.Taxi.group;
 
-import com.example.Taxi.domain.Group;
+import com.example.Taxi.group.Group;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

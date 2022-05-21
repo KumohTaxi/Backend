@@ -1,6 +1,6 @@
-package com.example.Taxi.repo;
+package com.example.Taxi.member;
 
-import com.example.Taxi.domain.Member;
+import com.example.Taxi.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

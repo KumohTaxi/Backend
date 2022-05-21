@@ -1,5 +1,6 @@
-package com.example.Taxi.domain;
+package com.example.Taxi.member;
 
+import com.example.Taxi.group.Group;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

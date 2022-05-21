@@ -1,14 +1,11 @@
-package com.example.Taxi.service;
+package com.example.Taxi.member;
 
 
-import com.example.Taxi.JwtTokenProvider;
+import com.example.Taxi.token.JwtTokenProvider;
 import com.example.Taxi.KaKaoApI;
-import com.example.Taxi.controller.TokenDto;
-import com.example.Taxi.domain.Gender;
-import com.example.Taxi.domain.Member;
-import com.example.Taxi.domain.Token;
-import com.example.Taxi.repo.MemberRepo;
-import com.example.Taxi.repo.TokenRepo;
+import com.example.Taxi.post.TokenRepo;
+import com.example.Taxi.token.Token;
+import com.example.Taxi.token.TokenDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

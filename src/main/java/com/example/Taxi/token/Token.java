@@ -1,4 +1,4 @@
-package com.example.Taxi.domain;
+package com.example.Taxi.token;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,9 +1,10 @@
-package com.example.Taxi.controller;
+package com.example.Taxi.group;
 
-import com.example.Taxi.domain.Member;
-import com.example.Taxi.domain.Post;
-import com.example.Taxi.service.GroupService;
-import com.example.Taxi.service.MemberService;
+import com.example.Taxi.post.PostResDto;
+import com.example.Taxi.token.TokenDto;
+import com.example.Taxi.member.Member;
+import com.example.Taxi.post.Post;
+import com.example.Taxi.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -64,7 +65,6 @@ public class GroupController {
 
     @PostMapping("/group/{id}/exit")
     public void exitGroup(@PathVariable Long id, @RequestBody TokenDto tokenDto) throws Exception{
-        Member member = memberService.findMemberByAccessToken(tokenDto.getAccessToken());
         groupService.exit(id, tokenDto.getAccessToken());
     }
 

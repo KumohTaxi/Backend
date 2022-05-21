@@ -1,13 +1,9 @@
-package com.example.Taxi.service;
+package com.example.Taxi.post;
 
-import com.example.Taxi.JwtTokenProvider;
-import com.example.Taxi.controller.PostReqDto;
-import com.example.Taxi.domain.Group;
-import com.example.Taxi.domain.Member;
-import com.example.Taxi.domain.Post;
-import com.example.Taxi.repo.GroupRepo;
-import com.example.Taxi.repo.MemberRepo;
-import com.example.Taxi.repo.PostRepo;
+import com.example.Taxi.token.JwtTokenProvider;
+import com.example.Taxi.group.Group;
+import com.example.Taxi.group.GroupRepo;
+import com.example.Taxi.member.MemberRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

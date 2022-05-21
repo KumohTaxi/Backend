@@ -1,7 +1,7 @@
 //package com.example.Taxi.Controller;
 //
-//import com.example.Taxi.controller.MemberController;
-//import com.example.Taxi.domain.Member;
+//import com.example.Taxi.member.MemberController;
+//import com.example.Taxi.member.Member;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 //import org.junit.Test;
 //import org.junit.runner.RunWith;

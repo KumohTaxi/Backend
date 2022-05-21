@@ -1,6 +1,6 @@
-package com.example.Taxi;
+package com.example.Taxi.member;
 
-import com.example.Taxi.domain.Gender;
+import com.example.Taxi.member.Gender;
 import lombok.Getter;
 
 @Getter

@@ -1,4 +1,4 @@
-package com.example.Taxi.controller;
+package com.example.Taxi.member;
 
 import lombok.Builder;
 import lombok.Getter;
