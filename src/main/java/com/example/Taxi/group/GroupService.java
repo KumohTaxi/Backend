@@ -8,6 +8,7 @@ import com.example.Taxi.token.Token;
 import com.example.Taxi.member.MemberRepo;
 import com.example.Taxi.post.TokenRepo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -58,10 +59,12 @@ public class GroupService {
     }
 
     @Transactional
-    public void enter(Long id, String accessToken) throws Exception{
+    public void enter(Long id, String accessToken) {
         Group group = groupRepo.findById(id);
         Token token = tokenRepo.findTokenByAccessToken(accessToken).get(0);
-        group.involveMember(memberRepo.findMemberByIdentityNum(token.getIdentityNum()).get(0));
+        Member member = memberRepo.findMemberByIdentityNum(token.getIdentityNum()).get(0);
+        group.involveMember(member);
+        log.info("{} 방 입장: {}",id,member.getNickname());
     }
 
     @Transactional
