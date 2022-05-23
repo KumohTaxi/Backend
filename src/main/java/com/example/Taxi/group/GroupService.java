@@ -29,22 +29,28 @@ public class GroupService {
         groupRepo.save(groupReqDto.toEntity(member));
     }
 
+    /**
+     * TODO 세션 관련 로직 깔끔하게 다시 짜기(orElseThrow..?, Optional...?) or Spring Security 구현
+     */
     public List<GroupResponseDto> findGroups(TokenDto tokenDto) {
 
         List<GroupResponseDto> groupResDtos =new ArrayList<>();
-        Member member = memberRepo.findMemberByIdentityNum(
-                tokenRepo.findTokenByAccessToken(tokenDto.getAccessToken()).get(0).getIdentityNum()).get(0);
-
-        for (Group group : groupRepo.findAll()) {
-            if (group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender()) {
-                continue;
-            } else if (group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
-                for (Member groupMember : group.getMembers()) {
-                    groupMember.exitGroup();
+        try {
+            Member member = memberRepo.findMemberByIdentityNum(
+                    tokenRepo.findTokenByAccessToken(tokenDto.getAccessToken()).get(0).getIdentityNum()).get(0);
+            for (Group group : groupRepo.findAll()) {
+                if (group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender()) {
+                    continue;
+                } else if (group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
+                    for (Member groupMember : group.getMembers()) {
+                        groupMember.exitGroup();
+                    }
+                    continue;
                 }
-                continue;
+                groupResDtos.add(new GroupResponseDto(group));
             }
-            groupResDtos.add(new GroupResponseDto(group));
+        } catch (IndexOutOfBoundsException ex) {
+            throw new CustomException(CustomExceptionStatus.EXPIRE_SESSION);
         }
         return groupResDtos;
     }
@@ -73,7 +79,7 @@ public class GroupService {
         group.removeMember(member);
     }
 
-    public GroupResponseDto findMyGroup(String accessToken) throws Exception {
+    public GroupResponseDto findMyGroup(String accessToken) {
 
         Member member = memberRepo.findMemberByIdentityNum(
                 tokenRepo.findTokenByAccessToken(accessToken).get(0).getIdentityNum()).get(0);
@@ -83,7 +89,6 @@ public class GroupService {
         } else if (member.getGroup().getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
             member.exitGroup();
         }
-
         return new GroupResponseDto(member.getGroup());
     }
 }
