@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.Date;
-import java.util.List;
 
 @Slf4j
 @Transactional
@@ -69,22 +68,19 @@ public class JwtTokenProvider {
     }
 
     public Long getIdentityNumByAccessToken(String accessToken) {
-        List<Token> token = tokenRepo.findTokenByAccessToken(accessToken);
-        return token.get(0).getIdentityNum();
+        return tokenRepo.findIdentityNumByAccessToken(accessToken)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
     }
 
     public void update(Long identityNum, String AccessToken) {
-        List<Token> token = tokenRepo.findTokenByIdentityNum(identityNum);
-        token.get(0).updateAccessToken(AccessToken);
+        Token token = tokenRepo.findTokenByIdentityNum(identityNum)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
+        token.updateAccessToken(AccessToken);
     }
 
     public void save(Token token){
-        List<Token> tokens = tokenRepo.findTokenByIdentityNum(token.getIdentityNum());
-        if(tokens.isEmpty()){
-            tokenRepo.save(token);
-        }else{
-            tokens.get(0).updateAccessToken(token.getAccessToken());
-        }
-
+        Token findToken = tokenRepo.findTokenByIdentityNum(token.getIdentityNum())
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
+        findToken.updateAccessToken(token.getAccessToken());
     }
 }

@@ -1,6 +1,8 @@
 package com.example.Taxi.member;
 
 
+import com.example.Taxi.config.exception.CustomException;
+import com.example.Taxi.config.exception.CustomExceptionStatus;
 import com.example.Taxi.token.JwtTokenProvider;
 import com.example.Taxi.KaKaoApI;
 import com.example.Taxi.post.TokenRepo;
@@ -11,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
 
 
 @Slf4j
@@ -46,22 +46,22 @@ public class MemberService {
     }
 
     public Member findMemberByIdentityNum(Long identityNum) {
-        //예외처리 필요 + Optional로 처리
-        return memberRepo.findMemberByIdentityNum(identityNum).get(0);
+        return memberRepo.findMemberByIdentityNum(identityNum).orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
     }
 
     public Member findMemberByAccessToken(String accessToken) {
-        //예외처리 필요 + Optional로 처리
         return memberRepo.findMemberByIdentityNum(
-                jwtTokenProvider.getIdentityNumByAccessToken(accessToken)).get(0);
+                jwtTokenProvider.getIdentityNumByAccessToken(accessToken)).orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
     }
 
     @Transactional
     public void remove(TokenDto tokenDto) {
         Member member = memberRepo.findMemberByIdentityNum(
-                jwtTokenProvider.getIdentityNumByAccessToken(tokenDto.getAccessToken())).get(0);
+                jwtTokenProvider.getIdentityNumByAccessToken(tokenDto.getAccessToken())).orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
         kaKaoApI.unlink(member.getAccessTokenKaKao());
-        tokenRepo.remove(tokenRepo.findTokenByAccessToken(tokenDto.getAccessToken()).get(0));
+        Token token = tokenRepo.findTokenByAccessToken(tokenDto.getAccessToken())
+                .orElseThrow(() -> new CustomException(CustomExceptionStatus.INVALID_TOKEN));
+        tokenRepo.remove(token);
     }
 
 }
