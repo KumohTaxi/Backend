@@ -2,7 +2,6 @@ package com.example.Taxi.token;
 
 import com.example.Taxi.config.exception.CustomException;
 import com.example.Taxi.config.exception.CustomExceptionStatus;
-import com.example.Taxi.post.TokenRepo;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

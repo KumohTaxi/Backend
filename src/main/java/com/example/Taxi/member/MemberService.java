@@ -3,9 +3,9 @@ package com.example.Taxi.member;
 
 import com.example.Taxi.token.JwtTokenProvider;
 import com.example.Taxi.KaKaoApI;
-import com.example.Taxi.post.TokenRepo;
 import com.example.Taxi.token.Token;
 import com.example.Taxi.token.TokenDto;
+import com.example.Taxi.token.TokenRepo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

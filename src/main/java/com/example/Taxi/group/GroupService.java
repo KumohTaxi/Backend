@@ -6,7 +6,7 @@ import com.example.Taxi.token.TokenDto;
 import com.example.Taxi.member.Member;
 import com.example.Taxi.token.Token;
 import com.example.Taxi.member.MemberRepo;
-import com.example.Taxi.post.TokenRepo;
+import com.example.Taxi.token.TokenRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
