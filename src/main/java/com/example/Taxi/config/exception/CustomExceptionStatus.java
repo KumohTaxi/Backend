@@ -13,7 +13,8 @@ public enum CustomExceptionStatus {
     INVALID_TOKEN(1003,"유효하지 않은 토큰입니다."),
     NOT_EQUAL_GROUP_GENDER(1004,"그룹 성별과 사용자의 성별이 일치하지 않습니다."),
     EXPIRE_SESSION(1005,"세션이 만료되었습니다."),
-    INVALID_AUTH_CODE(1006,"유효하지 않은 인가코드입니다.");
+    INVALID_IDENTITY_NUM(1006,"유효하지 않은 회원 고유번호 입니다."),
+    INVALID_AUTH_CODE(1007,"유효하지 않은 인가코드입니다.");
 
     private final int errorCode;
     private final String message;
