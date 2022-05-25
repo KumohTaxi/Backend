@@ -4,7 +4,6 @@ import com.example.Taxi.config.exception.CustomException;
 import com.example.Taxi.config.exception.CustomExceptionStatus;
 import com.example.Taxi.token.TokenDto;
 import com.example.Taxi.member.Member;
-import com.example.Taxi.token.Token;
 import com.example.Taxi.member.MemberRepo;
 import com.example.Taxi.post.TokenRepo;
 import lombok.RequiredArgsConstructor;
@@ -35,54 +34,55 @@ public class GroupService {
     public List<GroupResponseDto> findGroups(TokenDto tokenDto) {
 
         List<GroupResponseDto> groupResDtos =new ArrayList<>();
-        try {
-            Member member = memberRepo.findMemberByIdentityNum(
-                    tokenRepo.findTokenByAccessToken(tokenDto.getAccessToken()).get(0).getIdentityNum()).get(0);
-            for (Group group : groupRepo.findAll()) {
-                if (group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender()) {
-                    continue;
-                } else if (group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
-                    for (Member groupMember : group.getMembers()) {
-                        groupMember.exitGroup();
-                    }
-                    continue;
+        Long identityNum = tokenRepo.findIdentityNumByAccessToken(tokenDto.getAccessToken())
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
+        Member member = memberRepo.findMemberByIdentityNum(identityNum)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
+
+        for (Group group : groupRepo.findAll()) {
+            if (group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender()) continue;
+            else if (group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
+                for (Member groupMember : group.getMembers()) {
+                    groupMember.exitGroup();
                 }
-                groupResDtos.add(new GroupResponseDto(group));
+                continue;
             }
-        } catch (IndexOutOfBoundsException ex) {
-            throw new CustomException(CustomExceptionStatus.EXPIRE_SESSION);
+            groupResDtos.add(new GroupResponseDto(group));
         }
         return groupResDtos;
     }
 
-    public Group findOne(Long id) throws Exception {
+    public Group findOne(Long id) {
         Group group = groupRepo.findById(id);
-        if (group == null) {
-            throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
-        }
+        if (group == null) throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
+
         return group;
     }
 
     @Transactional
     public void enter(Long id, String accessToken) throws Exception{
         Group group = groupRepo.findById(id);
-        Token token = tokenRepo.findTokenByAccessToken(accessToken).get(0);
-        group.involveMember(memberRepo.findMemberByIdentityNum(token.getIdentityNum()).get(0));
+        Long identityNum = tokenRepo.findIdentityNumByAccessToken(accessToken)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
+        group.involveMember(memberRepo.findMemberByIdentityNum(identityNum)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM)));
     }
 
     @Transactional
     public void exit(Long id, String accessToken) {
-
-        Member member = memberRepo.findMemberByIdentityNum(
-                tokenRepo.findTokenByAccessToken(accessToken).get(0).getIdentityNum()).get(0);
+        Long identityNum = tokenRepo.findIdentityNumByAccessToken(accessToken)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
+        Member member = memberRepo.findMemberByIdentityNum(identityNum)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
         Group group = groupRepo.findById(id);
         group.removeMember(member);
     }
 
     public GroupResponseDto findMyGroup(String accessToken) {
-
-        Member member = memberRepo.findMemberByIdentityNum(
-                tokenRepo.findTokenByAccessToken(accessToken).get(0).getIdentityNum()).get(0);
+        Long identityNum = tokenRepo.findIdentityNumByAccessToken(accessToken)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
+        Member member = memberRepo.findMemberByIdentityNum(identityNum)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
 
         if (member.getGroup() == null) {
             throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
