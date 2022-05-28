@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 @Transactional
@@ -79,8 +80,8 @@ public class JwtTokenProvider {
     }
 
     public void save(Token token){
-        Token findToken = tokenRepo.findTokenByIdentityNum(token.getIdentityNum())
-                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
-        findToken.updateAccessToken(token.getAccessToken());
+        Optional<Token> findToken = tokenRepo.findTokenByIdentityNum(token.getIdentityNum());
+        if(findToken.isEmpty()) tokenRepo.save(token);
+        else findToken.get().updateAccessToken(token.getAccessToken());
     }
 }

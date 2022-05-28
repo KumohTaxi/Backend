@@ -40,7 +40,7 @@ public class GroupService {
                 .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
 
         for (Group group : groupRepo.findAll()) {
-            if (group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender()) continue;
+            if (isSameGender(group, member)) continue;
             else if (group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
                 for (Member groupMember : group.getMembers()) {
                     groupMember.exitGroup();
@@ -50,6 +50,10 @@ public class GroupService {
             groupResDtos.add(new GroupResponseDto(group));
         }
         return groupResDtos;
+    }
+
+    private boolean isSameGender(Group group, Member member) {
+        return group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender();
     }
 
     public Group findOne(Long id) {
