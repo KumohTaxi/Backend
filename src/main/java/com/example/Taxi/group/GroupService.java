@@ -93,6 +93,7 @@ public class GroupService {
             throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
         } else if (member.getGroup().getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
             member.exitGroup();
+            throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
         }
         return new GroupResponseDto(member.getGroup());
     }
