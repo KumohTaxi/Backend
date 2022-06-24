@@ -41,7 +41,7 @@ public class Group {
         this.members.add(member);
         member.makeGroup(this);
     }
-    
+
     public void removeMember(Member member) {
         members.remove(member);
         member.exitGroup();
@@ -61,5 +61,12 @@ public class Group {
 
     public void post(Post post) {
         posts.add(post);
+    }
+
+    public void removeAllMember() {
+        for (Member member : members) {
+            member.exitGroup();
+        }
+        members.clear();
     }
 }
