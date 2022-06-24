@@ -31,6 +31,7 @@ public class GroupService {
     /**
      * TODO 세션 관련 로직 깔끔하게 다시 짜기(orElseThrow..?, Optional...?) or Spring Security 구현
      */
+    @Transactional
     public List<GroupResponseDto> findGroups(TokenDto tokenDto) {
 
         List<GroupResponseDto> groupResDtos =new ArrayList<>();
@@ -42,9 +43,7 @@ public class GroupService {
         for (Group group : groupRepo.findAll()) {
             if (isSameGender(group, member)) continue;
             else if (group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
-                for (Member groupMember : group.getMembers()) {
-                    groupMember.exitGroup();
-                }
+                group.removeAllMember();
                 continue;
             }
             groupResDtos.add(new GroupResponseDto(group));
