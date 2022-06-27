@@ -1,5 +1,5 @@
 package com.example.Taxi.member;
 
 public enum Gender {
-    MALE,FEMALE,NONE
+    MALE,FEMALE,NONE,ALL
 }

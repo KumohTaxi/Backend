@@ -92,13 +92,12 @@ public class GroupService {
      * TODO 그룹 유효성 검증에 대한 테스트 코드 작성하기
      */
     private boolean isValidateGroup(Group group, Member member) {
+
         if(group.getMembers().size() == 0);
-        else if(group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))){
-            group.removeAllMember();
-        }
-        else {
-            return member.getStatus().equals(group.getMembers().get(0).getStatus());
-        }
+        else if(group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))) group.removeAllMember();
+        else return member.getGender().equals(Gender.ALL) ||
+                    member.getGender().equals(group.getMembers().get(0).getGender());
+
         return false;
     }
 }
