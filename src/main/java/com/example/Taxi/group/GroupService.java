@@ -2,9 +2,9 @@ package com.example.Taxi.group;
 
 import com.example.Taxi.config.exception.CustomException;
 import com.example.Taxi.config.exception.CustomExceptionStatus;
+import com.example.Taxi.member.Gender;
 import com.example.Taxi.token.TokenDto;
 import com.example.Taxi.member.Member;
-import com.example.Taxi.token.Token;
 import com.example.Taxi.member.MemberRepo;
 import com.example.Taxi.token.TokenRepo;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO 세션 관련 로직 깔끔하게 다시 짜기(orElseThrow..?, Optional...?) or Spring Security 구현
+ */
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +32,6 @@ public class GroupService {
         groupRepo.save(groupReqDto.toEntity(member));
     }
 
-    /**
-     * TODO 세션 관련 로직 깔끔하게 다시 짜기(orElseThrow..?, Optional...?) or Spring Security 구현
-     */
     @Transactional
     public List<GroupResponseDto> findGroups(TokenDto tokenDto) {
 
@@ -42,18 +42,9 @@ public class GroupService {
                 .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
 
         for (Group group : groupRepo.findAll()) {
-            if (isSameGender(group, member)) continue;
-            else if (group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
-                group.removeAllMember();
-                continue;
-            }
-            groupResDtos.add(new GroupResponseDto(group));
+            if(isValidateGroup(group,member)) groupResDtos.add(new GroupResponseDto(group));
         }
         return groupResDtos;
-    }
-
-    private boolean isSameGender(Group group, Member member) {
-        return group.getMembers().size() == 0 || member.getGender() != group.getMembers().get(0).getGender();
     }
 
     public Group findOne(Long id) {
@@ -95,5 +86,19 @@ public class GroupService {
             throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
         }
         return new GroupResponseDto(member.getGroup());
+    }
+
+    /**
+     * TODO 그룹 유효성 검증에 대한 테스트 코드 작성하기
+     */
+    private boolean isValidateGroup(Group group, Member member) {
+        if(group.getMembers().size() == 0);
+        else if(group.getDateTime().isBefore(LocalDateTime.now().minusHours(1))){
+            group.removeAllMember();
+        }
+        else {
+            return member.getStatus().equals(group.getMembers().get(0).getStatus());
+        }
+        return false;
     }
 }
