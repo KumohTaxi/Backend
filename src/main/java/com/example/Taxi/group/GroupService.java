@@ -29,6 +29,7 @@ public class GroupService {
 
     @Transactional
     public void createGroup(GroupRequestDto groupReqDto, Member member) {
+
         groupRepo.save(groupReqDto.toEntity(member));
     }
 
@@ -36,10 +37,7 @@ public class GroupService {
     public List<GroupResponseDto> findGroups(TokenDto tokenDto) {
 
         List<GroupResponseDto> groupResDtos =new ArrayList<>();
-        Long identityNum = tokenRepo.findIdentityNumByAccessToken(tokenDto.getAccessToken())
-                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
-        Member member = memberRepo.findMemberByIdentityNum(identityNum)
-                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
+        Member member = findMemberByAccessToken(tokenDto.getAccessToken());
 
         for (Group group : groupRepo.findAll()) {
             if(isValidateGroup(group,member)) groupResDtos.add(new GroupResponseDto(group));
@@ -48,6 +46,7 @@ public class GroupService {
     }
 
     public Group findOne(Long id) {
+
         Group group = groupRepo.findById(id);
         if (group == null) throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
 
@@ -56,29 +55,23 @@ public class GroupService {
 
     @Transactional
     public void enter(Long id, String accessToken) {
+
         Group group = groupRepo.findById(id);
-        Long identityNum = tokenRepo.findIdentityNumByAccessToken(accessToken)
-                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
-        group.involveMember(memberRepo.findMemberByIdentityNum(identityNum)
-                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM)));
+        Member member = findMemberByAccessToken(accessToken);
+        group.involveMember(member);
     }
 
     @Transactional
     public void exit(Long id, String accessToken) {
-        Long identityNum = tokenRepo.findIdentityNumByAccessToken(accessToken)
-                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
-        Member member = memberRepo.findMemberByIdentityNum(identityNum)
-                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
+
+        Member member = findMemberByAccessToken(accessToken);
         Group group = groupRepo.findById(id);
         group.removeMember(member);
     }
 
     public GroupResponseDto findMyGroup(String accessToken) {
-        Long identityNum = tokenRepo.findIdentityNumByAccessToken(accessToken)
-                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
-        Member member = memberRepo.findMemberByIdentityNum(identityNum)
-                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
 
+        Member member = findMemberByAccessToken(accessToken);
         if (member.getGroup() == null) {
             throw new CustomException(CustomExceptionStatus.NOT_EXIST_GROUP);
         } else if (member.getGroup().getDateTime().isBefore(LocalDateTime.now().minusHours(1))) {
@@ -99,5 +92,13 @@ public class GroupService {
                     member.getGender().equals(group.getMembers().get(0).getGender());
 
         return false;
+    }
+
+    private Member findMemberByAccessToken(String accessToken) {
+        Long identityNum = tokenRepo.findIdentityNumByAccessToken(accessToken)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_TOKEN));
+        Member member = memberRepo.findMemberByIdentityNum(identityNum)
+                .orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
+        return member;
     }
 }
