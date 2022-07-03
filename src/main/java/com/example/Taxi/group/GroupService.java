@@ -81,6 +81,19 @@ public class GroupService {
         return new GroupResponseDto(member.getGroup());
     }
 
+    public List<GroupResponseDto> findGroupsByDst(String destination, TokenDto tokenDto) {
+
+        List<GroupResponseDto> groupResDtos =new ArrayList<>();
+        Member member = findMemberByAccessToken(tokenDto.getAccessToken());
+
+        for (Group group : groupRepo.findAll()) {
+            if(isValidateGroup(group,member) &&
+                    group.getDestination().equals(destination)) groupResDtos.add(new GroupResponseDto(group));
+        }
+        return groupResDtos;
+
+    }
+
     /**
      * TODO 그룹 유효성 검증에 대한 테스트 코드 작성하기
      */
