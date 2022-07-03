@@ -54,11 +54,12 @@ public class GroupService {
     }
 
     @Transactional
-    public void enter(Long id, String accessToken) {
+    public Long enter(Long id, String accessToken) {
 
         Group group = groupRepo.findById(id);
         Member member = findMemberByAccessToken(accessToken);
         group.involveMember(member);
+        return group.getId();
     }
 
     @Transactional

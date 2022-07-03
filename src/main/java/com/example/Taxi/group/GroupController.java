@@ -55,9 +55,9 @@ public class GroupController {
     }
 
     @PostMapping("/group/{id}")
-    public void enterGroup(@PathVariable Long id, @RequestBody TokenDto tokenDto) throws Exception {
+    public Long enterGroup(@PathVariable Long id, @RequestBody TokenDto tokenDto) throws Exception {
         log.info(tokenDto.getAccessToken());
-        groupService.enter(id, tokenDto.getAccessToken());
+        return groupService.enter(id, tokenDto.getAccessToken());
     }
 
     @GetMapping("/group/{id}")
