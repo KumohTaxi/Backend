@@ -1,5 +1,7 @@
 package com.example.Taxi.group;
 
+import com.example.Taxi.config.exception.CustomException;
+import com.example.Taxi.config.exception.CustomExceptionStatus;
 import com.example.Taxi.member.Member;
 import com.example.Taxi.post.Post;
 import com.example.Taxi.member.Status;
@@ -48,9 +50,9 @@ public class Group {
         }
     }
 
-    public void involveMember(Member member) throws Exception{
+    public void involveMember(Member member) {
         if(members.get(0).getGender() != member.getGender()){
-            throw new Exception("방 성별과 입장할 사용자의 성별이 다릅니다.");
+            throw new CustomException(CustomExceptionStatus.NOT_EQUAL_GROUP_GENDER);
         } else{
             members.add(member);
             member.joinGroup(this);

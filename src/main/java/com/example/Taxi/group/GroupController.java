@@ -9,8 +9,6 @@ import com.example.Taxi.post.Post;
 import com.example.Taxi.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,7 +17,7 @@ import java.util.List;
 
 
 /**
- * @TODO accessToken의 유효성 검증이 필요하다!!
+ * TODO accessToken의 유효성 검증이 필요하다!!
  */
 
 @Slf4j
@@ -46,15 +44,20 @@ public class GroupController {
         return groupService.findGroups(tokenDto);
     }
 
+    @PostMapping("/group/filter/{destination}")
+    public List<GroupResponseDto> findGroupByFilter(@PathVariable String destination, @RequestBody TokenDto tokenDto) {
+        return groupService.findGroupsByDst(destination, tokenDto);
+    }
+
     @GetMapping("/group/member/{accessToken}")
     public GroupResponseDto findMyGroup(@PathVariable String accessToken) throws Exception {
         return groupService.findMyGroup(accessToken);
     }
 
     @PostMapping("/group/{id}")
-    public void enterGroup(@PathVariable Long id, @RequestBody TokenDto tokenDto) throws Exception {
+    public Long enterGroup(@PathVariable Long id, @RequestBody TokenDto tokenDto) throws Exception {
         log.info(tokenDto.getAccessToken());
-        groupService.enter(id, tokenDto.getAccessToken());
+        return groupService.enter(id, tokenDto.getAccessToken());
     }
 
     @GetMapping("/group/{id}")

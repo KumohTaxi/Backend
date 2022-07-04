@@ -1,5 +1,7 @@
 package com.example.Taxi;
 
+import com.example.Taxi.config.exception.CustomException;
+import com.example.Taxi.config.exception.CustomExceptionStatus;
 import com.example.Taxi.token.TokenDto;
 import com.example.Taxi.member.Gender;
 import com.example.Taxi.member.Member;
@@ -49,25 +51,32 @@ public class KaKaoApI {
             bw.write(sb.toString());
             bw.flush();
 
-            log.info(sb.toString());
-            log.info("getToken ResponseCode: " + conn.getResponseCode());
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line = ""; String result = "";
-            while ((line = br.readLine()) != null) {
-                result += line;
+            if(conn.getResponseCode() != 200){
+                log.error("kakao api getToken : " + conn.getResponseMessage());
+                log.info(sb.toString());
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+                while ((line = br.readLine()) != null) {
+                    result += line;
+                }
+                br.close();
+                JsonElement element = JsonParser.parseString(result);
+                log.error("kakao api messageBody :" + element.toString());
+                throw new CustomException(CustomExceptionStatus.INVALID_AUTH_CODE);
+            } else{
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = br.readLine()) != null) {
+                    result += line;
+                }
+                br.close();
+                JsonElement element = JsonParser.parseString(result);
+                accessToken = element.getAsJsonObject().get("access_token").getAsString();
+                refreshToken = element.getAsJsonObject().get("refresh_token").getAsString();
             }
-
-            JsonElement element = JsonParser.parseString(result);
-
-            accessToken = element.getAsJsonObject().get("access_token").getAsString();
-            refreshToken = element.getAsJsonObject().get("refresh_token").getAsString();
-
-            br.close();
             bw.close();
 
         } catch (IOException e){
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         return new TokenDto(accessToken,refreshToken);
@@ -142,7 +151,8 @@ public class KaKaoApI {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-            log.info("unlink responseCode : " + conn.getResponseCode());
+            log.info("kakao api: unlink responseCode : " + conn.getResponseCode());
+            log.info("kakao api: unlink responseMessage: " + conn.getResponseMessage());
 
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String result = ""; String line = "";
