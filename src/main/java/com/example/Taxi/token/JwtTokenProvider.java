@@ -52,7 +52,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public boolean validateToken(String jwtToken) throws Exception {
+    public boolean validateToken(String jwtToken) {
         try{
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken);
             return !claimsJws.getBody().getExpiration().before(new Date());

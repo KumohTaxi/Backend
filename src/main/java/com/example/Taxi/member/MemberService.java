@@ -45,7 +45,8 @@ public class MemberService {
         return tokenByService;
     }
 
-    public Member findMemberByIdentityNum(Long identityNum) {
+    public Member findMemberByIdentityNum(TokenDto tokenDto) {
+        Long identityNum = jwtTokenProvider.getIdentityNumByAccessToken(tokenDto.getAccessToken());
         return memberRepo.findMemberByIdentityNum(identityNum).orElseThrow(()->new CustomException(CustomExceptionStatus.INVALID_IDENTITY_NUM));
     }
 
@@ -64,4 +65,13 @@ public class MemberService {
         tokenRepo.remove(token);
     }
 
+    public TokenDto reissue(TokenDto tokenDto) {
+        if (!jwtTokenProvider.validateToken(tokenDto.getRefreshToken())) {
+            throw new CustomException(CustomExceptionStatus.INVALID_TOKEN);
+        } else {
+            TokenDto token = jwtTokenProvider.createToken(jwtTokenProvider.getIdentityNumByRefreshToken(tokenDto.getRefreshToken()));
+            jwtTokenProvider.update(jwtTokenProvider.getIdentityNumByRefreshToken(tokenDto.getRefreshToken()), token.getAccessToken());
+            return token;
+        }
+    }
 }

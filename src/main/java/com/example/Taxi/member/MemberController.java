@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class MemberController {
     private final MemberService memberService;
-    private final JwtTokenProvider jwtTokenProvider;
-
 
     @PostMapping("/auth/kakao")
     public TokenDto login(@RequestBody LoginReqDto loginReqDto) {
@@ -26,20 +24,12 @@ public class MemberController {
 
     @PostMapping("/member/token")
     public TokenDto reissue(@RequestBody TokenDto tokenDto) throws Exception {
-
-        if (!jwtTokenProvider.validateToken(tokenDto.getRefreshToken())) {
-            throw new CustomException(CustomExceptionStatus.INVALID_TOKEN);
-        } else {
-            TokenDto token = jwtTokenProvider.createToken(jwtTokenProvider.getIdentityNumByRefreshToken(tokenDto.getRefreshToken()));
-            jwtTokenProvider.update(jwtTokenProvider.getIdentityNumByRefreshToken(tokenDto.getRefreshToken()), token.getAccessToken());
-            return token;
-        }
+        return memberService.reissue(tokenDto);
     }
 
     @PostMapping("/member/id")
     public Long getId(@RequestBody TokenDto tokenDto) {
-        return memberService.findMemberByIdentityNum(
-                jwtTokenProvider.getIdentityNumByAccessToken(tokenDto.getAccessToken())).getIdentityNum();
+        return memberService.findMemberByIdentityNum(tokenDto).getIdentityNum();
     }
 
     @PostMapping("/member/unlink")
