@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +44,10 @@ public class ItemService {
             }
         }
         return newItems;
+    }
+
+    public List<ItemResDto> findItemByLocation(String location, Status status) {
+        return jpaItemRepo.findByLocationContainsAndStatus(location, status)
+                .stream().map(item -> new ItemResDto(item)).collect(Collectors.toList());
     }
 }
