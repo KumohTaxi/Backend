@@ -37,6 +37,7 @@ out/
 .vscode/
 *application-dev.yml
 *application-prod.yml
+*application-aws.yml
 /Jenkinsfile
 /sql
 /src/main/resources/keystore.p12
