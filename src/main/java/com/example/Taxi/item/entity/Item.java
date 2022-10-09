@@ -24,12 +24,14 @@ public class Item {
     private String img;
 
     @Builder
-    public Item(String atcId,String location, String name, Status status,String category, LocalDate lostTime) {
+    public Item(String atcId,String location, String name, Status status,
+                String category, LocalDate lostTime, String img) {
         this.atcId = atcId;
         this.location = location;
         this.name = name;
         this.status = status;
         this.category = category;
         this.lostTime = lostTime;
+        this.img = img;
     }
 }

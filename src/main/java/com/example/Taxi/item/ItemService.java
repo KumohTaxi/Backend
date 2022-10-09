@@ -1,6 +1,7 @@
 package com.example.Taxi.item;
 
 import com.example.Taxi.PoliceApi;
+import com.example.Taxi.image.FileProcessService;
 import com.example.Taxi.item.entity.Item;
 import com.example.Taxi.item.entity.Page;
 import com.example.Taxi.item.entity.Status;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ public class ItemService {
     private final JpaItemRepo jpaItemRepo;
     private final JpaPageRepo jpaPageRepo;
     private final PoliceApi policeApi;
+    private final FileProcessService fileService;
     private String acqUrl = "http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccToLc";
 
     @Scheduled(cron = "0 0 3 * * *")
@@ -34,6 +37,13 @@ public class ItemService {
             jpaItemRepo.saveAll(items);
         }
         page.updatePage(endPage);
+    }
+
+    @Transactional
+    public void enroll(MultipartFile img, ItemReqDto itemReqDto) {
+        String url = fileService.uploadImage(img);
+        Item item = itemReqDto.toEntity(url);
+        jpaItemRepo.save(item);
     }
 
     public List<Item> filterDuplicate(List<Item> items) {
