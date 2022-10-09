@@ -5,6 +5,8 @@ server:
 spring:
   profiles:
     active: dev
+    include:
+      - aws
 
 springdoc:
   version: '@project.version@'
