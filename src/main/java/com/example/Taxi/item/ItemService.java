@@ -6,15 +6,17 @@ import com.example.Taxi.item.entity.Item;
 import com.example.Taxi.item.entity.Page;
 import com.example.Taxi.item.entity.Status;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItemService {
@@ -22,21 +24,25 @@ public class ItemService {
     private final JpaPageRepo jpaPageRepo;
     private final PoliceApi policeApi;
     private final FileProcessService fileService;
+    private final EntityManager em;
     private String acqUrl = "http://apis.data.go.kr/1320000/LosfundInfoInqireService/getLosfundInfoAccToLc";
 
-    @Scheduled(cron = "0 0 3 * * *")
+    public void saveAcqItem(int p) {
+        List<Item> items = policeApi.checkItemInfo(p, 1000, acqUrl);
+        jpaItemRepo.saveAll(items);
+    }
+
     @Transactional
-    public void saveAcqItem() {
+    public void triggerSchedule() {
         Page page = jpaPageRepo.findByStatus(Status.ACQUIRE);
         int totalCount = policeApi.checkItemCount(acqUrl);
         int endPage = (totalCount / 1000) + 1;
-        List<Item> filterItems = filterDuplicate(policeApi.checkItemInfo(page.getLastPage(), 1000, acqUrl));
-        jpaItemRepo.saveAll(filterItems);
-        for (int p = page.getLastPage()+1; p <= endPage; p++) {
-            List<Item> items = policeApi.checkItemInfo(p, 1000, acqUrl);
-            jpaItemRepo.saveAll(items);
+        filterDuplicate(policeApi.checkItemInfo(page.getLastPage(), 1000, acqUrl));
+        for (int p = page.getLastPage()+1; p <= endPage+1; p++) {
+            log.info("page start:" + p);
+            saveAcqItem(p);
+            log.info("page end:" + p);
         }
-        page.updatePage(endPage);
     }
 
     @Transactional
@@ -46,14 +52,14 @@ public class ItemService {
         jpaItemRepo.save(item);
     }
 
-    public List<Item> filterDuplicate(List<Item> items) {
+    public void filterDuplicate(List<Item> items) {
         List<Item> newItems = new ArrayList<>();
         for (Item item : items) {
             if (!jpaItemRepo.existsByAtcId(item.getAtcId())) {
                 newItems.add(item);
             }
         }
-        return newItems;
+        jpaItemRepo.saveAll(newItems);
     }
 
     public List<ItemResDto> findItemByLocation(String location, Status status) {

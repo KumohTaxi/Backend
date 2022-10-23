@@ -2,6 +2,7 @@ package com.example.Taxi.item;
 
 import com.example.Taxi.item.entity.Status;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,5 +32,10 @@ public class ItemController {
             @RequestPart(required = false) MultipartFile img,
             @RequestPart ItemReqDto itemReqDto) {
         itemService.enroll(img,itemReqDto);
+    }
+
+    @Scheduled(cron = "0 15 15 * * *")
+    public void updateItem() {
+        itemService.triggerSchedule();
     }
 }
