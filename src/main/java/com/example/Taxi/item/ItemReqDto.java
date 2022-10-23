@@ -21,6 +21,7 @@ public class ItemReqDto {
     private double lat;
     private double lng;
     private String comment;
+    private String accessToken;
 
     public Item toEntity(String imgUrl) {
         return Item.builder()
