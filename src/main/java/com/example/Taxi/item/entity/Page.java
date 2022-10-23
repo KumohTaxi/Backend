@@ -3,9 +3,7 @@ package com.example.Taxi.item.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,6 +12,7 @@ import java.time.LocalDateTime;
 public class Page {
     @Id @GeneratedValue
     private Long id;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private Integer lastPage;
     private LocalDateTime updateTime;
