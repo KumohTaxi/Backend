@@ -15,6 +15,7 @@ public class ItemResDto {
     private String category;
     private LocalDate lostDate;
     private String img;
+    private Long identityNum;
 
     public ItemResDto(Item item) {
         this.atcId = item.getAtcId();
@@ -24,5 +25,6 @@ public class ItemResDto {
         this.category = item.getCategory();
         this.lostDate = item.getLostTime();
         this.img = item.getImg();
+        this.identityNum = item.getRegistrant().getIdentityNum();
     }
 }
