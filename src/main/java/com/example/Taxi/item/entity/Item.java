@@ -1,5 +1,6 @@
 package com.example.Taxi.item.entity;
 
+import com.example.Taxi.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,8 @@ public class Item {
     private String category;
     private LocalDate lostTime;
     private String img;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "member_id")
+    private Member registrant;
 
     @Builder
     public Item(String atcId,String location, String name, Status status,
@@ -33,5 +36,9 @@ public class Item {
         this.category = category;
         this.lostTime = lostTime;
         this.img = img;
+    }
+
+    public void enrollRegistrant(Member member) {
+        this.registrant = member;
     }
 }
