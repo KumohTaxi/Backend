@@ -40,6 +40,7 @@ public class PoliceApi {
                         .location(getTagValue("addr",element))
                         .status(Status.ACQUIRE)
                         .name(getTagValue("fdPrdtNm",element))
+                        .foundOrder(Integer.getInteger(getTagValue("fdSn",element)))
                         .build();
                 items.add(item);
             }

@@ -22,13 +22,14 @@ public class Item {
     private Status status;
     private String category;
     private LocalDate lostTime;
+    private Integer foundOrder;
     private String img;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "member_id")
     private Member registrant;
 
     @Builder
     public Item(String atcId,String location, String name, Status status,
-                String category, LocalDate lostTime, String img) {
+                String category, LocalDate lostTime, String img, Integer foundOrder) {
         this.atcId = atcId;
         this.location = location;
         this.name = name;
@@ -36,6 +37,7 @@ public class Item {
         this.category = category;
         this.lostTime = lostTime;
         this.img = img;
+        this.foundOrder = foundOrder;
     }
 
     public void enrollRegistrant(Member member) {
